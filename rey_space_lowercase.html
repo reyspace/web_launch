@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rey_space</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Gothic window light rays */
+        .gothic-window {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .light-ray {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            width: 4px;
+            height: 80%;
+            background: linear-gradient(to bottom, 
+                rgba(255, 255, 255, 0.3), 
+                rgba(255, 255, 255, 0.1), 
+                rgba(255, 255, 255, 0.05), 
+                transparent);
+            transform-origin: top center;
+            filter: blur(2px);
+        }
+
+        .light-ray:nth-child(1) { transform: translateX(-50%) rotate(-30deg); }
+        .light-ray:nth-child(2) { transform: translateX(-50%) rotate(-15deg); }
+        .light-ray:nth-child(3) { transform: translateX(-50%) rotate(0deg); }
+        .light-ray:nth-child(4) { transform: translateX(-50%) rotate(15deg); }
+        .light-ray:nth-child(5) { transform: translateX(-50%) rotate(30deg); }
+
+        /* Main content */
+        section {
+            padding: 4rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            min-height: 50vh;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        /* Contact form */
+        .contact-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 1rem;
+            background: #111;
+            border: 1px solid #333;
+            color: white;
+            font-size: 1rem;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #666;
+        }
+
+        button {
+            padding: 1rem 2rem;
+            background: white;
+            color: black;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background: #f0f0f0;
+        }
+
+        /* Gallery styles */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .art-piece {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .art-piece:hover {
+            transform: translateY(-5px);
+        }
+
+        .art-piece img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .art-caption {
+            padding: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #ccc;
+        }
+
+        /* Admin upload section */
+        .admin-section {
+            background: #111;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .admin-toggle {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .admin-toggle:hover {
+            background: #444;
+        }
+
+        .admin-content {
+            display: none;
+        }
+
+        .admin-content.active {
+            display: block;
+        }
+
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .file-input {
+            background: #222;
+            border: 1px solid #444;
+            color: white;
+            padding: 0.5rem;
+        }
+
+        .upload-btn {
+            background: #444;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .upload-btn:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <!-- Gothic window light rays -->
+    <div class="gothic-window">
+        <div class="light-ray"></div>
+        <div class="light-ray"></div>
+        <div class="light-ray"></div>
+        <div class="light-ray"></div>
+        <div class="light-ray"></div>
+    </div>
+
+    <h1>rey_space</h1>
+
+    <section>
+        <h2>LLM Visuals</h2>
+        <p>Visual representations of large language models and their architectures.</p>
+        
+        <!-- Admin Upload Section -->
+        <div class="admin-section">
+            <button class="admin-toggle" onclick="toggleAdmin()">Admin Upload</button>
+            <div class="admin-content" id="adminContent">
+                <div class="upload-form">
+                    <input type="file" class="file-input" id="imageInput" accept="image/*">
+                    <textarea placeholder="Enter caption for your art..." id="captionInput" rows="3"></textarea>
+                    <button class="upload-btn" onclick="uploadArt()">Upload Art</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery -->
+        <div class="gallery" id="gallery">
+            <!-- Uploaded art will appear here -->
+        </div>
+    </section>
+
+    <section>
+        <h2>Contact</h2>
+        <form class="contact-form" action="mailto:airplane.places@gmail.com" method="post" enctype="text/plain">
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <textarea rows="5" name="message" placeholder="Message" required></textarea>
+            </div>
+            <button type="submit">Send</button>
+        </form>
+    </section>
+</body>
+
+<script>
+// Art storage array (in memory for this session)
+let artPieces = [];
+
+function toggleAdmin() {
+    const adminContent = document.getElementById('adminContent');
+    adminContent.classList.toggle('active');
+}
+
+function uploadArt() {
+    const imageInput = document.getElementById('imageInput');
+    const captionInput = document.getElementById('captionInput');
+    
+    if (!imageInput.files[0]) {
+        alert('Please select an image');
+        return;
+    }
+    
+    if (!captionInput.value.trim()) {
+        alert('Please enter a caption');
+        return;
+    }
+    
+    const file = imageInput.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        const artPiece = {
+            id: Date.now(),
+            image: e.target.result,
+            caption: captionInput.value.trim()
+        };
+        
+        artPieces.push(artPiece);
+        displayGallery();
+        
+        // Clear form
+        imageInput.value = '';
+        captionInput.value = '';
+        
+        // Hide admin panel
+        document.getElementById('adminContent').classList.remove('active');
+    };
+    
+    reader.readAsDataURL(file);
+}
+
+function displayGallery() {
+    const gallery = document.getElementById('gallery');
+    gallery.innerHTML = '';
+    
+    artPieces.forEach(piece => {
+        const artDiv = document.createElement('div');
+        artDiv.className = 'art-piece';
+        artDiv.innerHTML = `
+            <img src="${piece.image}" alt="LLM Visual Art">
+            <div class="art-caption">${piece.caption}</div>
+        `;
+        gallery.appendChild(artDiv);
+    });
+}
+
+function removeArt(id) {
+    artPieces = artPieces.filter(piece => piece.id !== id);
+    displayGallery();
+}
+</script>
+
+</html>
