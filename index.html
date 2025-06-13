@@ -12,10 +12,12 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
             background: #000000;
             color: #ffffff;
             overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
         }
 
         /* Gothic window light rays */
@@ -31,17 +33,17 @@
 
         .light-ray {
             position: absolute;
-            top: 20%;
+            top: 15%;
             left: 50%;
-            width: 4px;
-            height: 80%;
+            width: 6px;
+            height: 85%;
             background: linear-gradient(to bottom, 
+                rgba(255, 255, 255, 0.6), 
                 rgba(255, 255, 255, 0.3), 
-                rgba(255, 255, 255, 0.1), 
-                rgba(255, 255, 255, 0.05), 
+                rgba(255, 255, 255, 0.15), 
                 transparent);
             transform-origin: top center;
-            filter: blur(2px);
+            filter: blur(0.3px);
         }
 
         .light-ray:nth-child(1) { transform: translateX(-50%) rotate(-30deg); }
@@ -50,72 +52,85 @@
         .light-ray:nth-child(4) { transform: translateX(-50%) rotate(15deg); }
         .light-ray:nth-child(5) { transform: translateX(-50%) rotate(30deg); }
 
+        /* Navigation Bar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem 2rem;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #cccccc;
+        }
+
         /* Main content */
         section {
             padding: 4rem 2rem;
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             min-height: 50vh;
+            position: relative;
+            z-index: 1;
         }
 
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 3rem;
-            text-align: center;
-        }
-
-        h2 {
-            font-size: 2rem;
+        h1, h2 {
+            font-size: 2.5rem;
             margin-bottom: 2rem;
+            text-align: center;
+            color: #ffffff;
         }
 
         p {
             font-size: 1.1rem;
             line-height: 1.6;
             margin-bottom: 1rem;
+            color: #cccccc;
+            text-align: center;
         }
 
-        /* Contact form */
-        .contact-form {
-            max-width: 500px;
-            margin: 0 auto;
+        /* Home Section Links */
+        .home-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 1rem;
-            background: #111;
-            border: 1px solid #333;
-            color: white;
+        .home-links a {
+            padding: 0.75rem 1.5rem;
+            background: #222;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
             font-size: 1rem;
+            transition: background 0.3s ease, transform 0.3s ease;
         }
 
-        input::placeholder, textarea::placeholder {
-            color: #666;
-        }
-
-        button {
-            padding: 1rem 2rem;
-            background: white;
-            color: black;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        button:hover {
-            background: #f0f0f0;
+        .home-links a:hover {
+            background: #333;
+            transform: translateY(-3px);
         }
 
         /* Gallery styles */
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
             margin-top: 2rem;
         }
 
@@ -124,31 +139,104 @@
             border: 1px solid #333;
             border-radius: 8px;
             overflow: hidden;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
         }
 
         .art-piece:hover {
             transform: translateY(-5px);
+            border-color: #555;
         }
 
         .art-piece img {
             width: 100%;
-            height: 200px;
+            height: 150px;
             object-fit: cover;
             display: block;
         }
 
         .art-caption {
-            padding: 1rem;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            color: #ccc;
+            padding: 0.75rem;
+            font-size: 0.85rem;
+            color: #cccccc;
+            background: #111;
+        }
+
+        /* Delete button for posts */
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.6rem;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            display: none;
+        }
+
+        .art-piece:hover .delete-btn, .writing-piece:hover .delete-btn {
+            display: block;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent to show rays */
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            background: #111;
+            border-radius: 12px;
+            overflow: hidden;
+            z-index: 1001;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            max-height: 70vh;
+            object-fit: contain;
+        }
+
+        .modal-caption {
+            padding: 1.5rem;
+            font-size: 1rem;
+            color: #fff;
+            background: #111;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
         }
 
         /* Admin upload section */
         .admin-section {
             background: #111;
-            border: 2px solid #333;
+            border: 1px solid #333;
             border-radius: 8px;
             padding: 2rem;
             margin-bottom: 3rem;
@@ -162,10 +250,6 @@
             cursor: pointer;
             border-radius: 4px;
             margin-bottom: 1rem;
-        }
-
-        .admin-toggle:hover {
-            background: #444;
         }
 
         .admin-content {
@@ -182,11 +266,13 @@
             gap: 1rem;
         }
 
-        .file-input {
+        .file-input, .writing-title-input, .writing-content-input {
             background: #222;
             border: 1px solid #444;
             color: white;
-            padding: 0.5rem;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border-radius: 4px;
         }
 
         .upload-btn {
@@ -201,6 +287,71 @@
         .upload-btn:hover {
             background: #555;
         }
+
+        /* Zodiac writing section */
+        .zodiac-section {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .zodiac-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .writing-piece {
+            background: #0a0a0a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 1.5rem;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .writing-title {
+            font-size: 1.3rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .writing-date {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 1rem;
+        }
+
+        .writing-preview {
+            font-size: 0.95rem;
+            color: #ccc;
+            max-height: 4.5em;
+            overflow: hidden;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            nav {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .art-piece img {
+                height: 120px;
+            }
+
+            .home-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -213,31 +364,59 @@
         <div class="light-ray"></div>
     </div>
 
-    <h1>rey_space</h1>
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#zodiac">Zodiac</a>
+        <a href="#contact">Contact</a>
+    </nav>
 
-    <section>
-        <h2>LLM Visuals</h2>
-        <p>Visual representations of large language models and their architectures.</p>
-        
-        <!-- Admin Upload Section -->
-        <div class="admin-section">
-            <button class="admin-toggle" onclick="toggleAdmin()">Admin Upload</button>
-            <div class="admin-content" id="adminContent">
-                <div class="upload-form">
-                    <input type="file" class="file-input" id="imageInput" accept="image/*">
-                    <textarea placeholder="Enter caption for your art..." id="captionInput" rows="3"></textarea>
-                    <button class="upload-btn" onclick="uploadArt()">Upload Art</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Gallery -->
-        <div class="gallery" id="gallery">
-            <!-- Uploaded art will appear here -->
+    <!-- Home Section -->
+    <section id="home">
+        <h1>rey_space</h1>
+        <p>hi</p>
+        <div class="home-links">
+            <a href="#gallery">View Gallery</a>
+            <a href="#zodiac">Read Zodiac Insights</a>
+            <a href="#contact">Contact Us</a>
         </div>
     </section>
 
-    <section>
+    <!-- Gallery Section -->
+    <section id="gallery">
+        <h2>Visuals</h2>
+        <div class="admin-section">
+            <button class="admin-toggle" onclick="toggleAdmin()">Upload Image</button>
+            <div class="admin-content" id="adminContent">
+                <div class="upload-form">
+                    <input type="file" class="file-input" id="imageInput" accept="image/*" multiple>
+                    <textarea placeholder="Enter caption..." id="captionInput" rows="3"></textarea>
+                    <button class="upload-btn" onclick="uploadArt()">Upload</button>
+                </div>
+            </div>
+        </div>
+        <div class="gallery" id="galleryContent"></div>
+    </section>
+
+    <!-- Zodiac Writing Section -->
+    <section id="zodiac">
+        <h2>Zodiac Insights</h2>
+        <div class="zodiac-section">
+            <button class="admin-toggle" onclick="toggleZodiacUpload()">Upload Writing</button>
+            <div class="admin-content" id="zodiacUploadContent">
+                <div class="upload-form">
+                    <input type="text" class="writing-title-input" id="writingTitleInput" placeholder="Title">
+                    <textarea class="writing-content-input" id="writingContentInput" placeholder="Content" rows="8"></textarea>
+                    <button class="upload-btn" onclick="uploadWriting()">Upload</button>
+                </div>
+            </div>
+        </div>
+        <div class="zodiac-content" id="zodiacContent"></div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
         <h2>Contact</h2>
         <form class="contact-form" action="mailto:airplane.places@gmail.com" method="post" enctype="text/plain">
             <div class="form-group">
@@ -252,74 +431,166 @@
             <button type="submit">Send</button>
         </form>
     </section>
+
+    <!-- Modals -->
+    <div id="imageModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">×</span>
+            <img class="modal-image" id="modalImage" src="" alt="">
+            <div class="modal-caption" id="modalCaption"></div>
+        </div>
+    </div>
+
+    <div id="writingModal" class="modal" onclick="closeWritingModal(event)">
+        <div class="modal-content">
+            <span class="close" onclick="closeWritingModal()">×</span>
+            <div class="writing-modal-header">
+                <div class="writing-modal-title" id="modalWritingTitle"></div>
+                <div class="writing-modal-date" id="modalWritingDate"></div>
+            </div>
+            <div class="writing-modal-body" id="modalWritingContent"></div>
+        </div>
+    </div>
+
+    <script>
+        let artPieces = [];
+        let writingPieces = [];
+        const adminPassword = "admin123";
+
+        function isAdmin() {
+            return localStorage.getItem('isAdmin') === 'true';
+        }
+
+        function adminLogin() {
+            const password = prompt("Enter admin password:");
+            if (password === adminPassword) {
+                localStorage.setItem('isAdmin', 'true');
+                alert("Admin access granted.");
+                displayGallery();
+                displayZodiacContent();
+            } else {
+                alert("Incorrect password.");
+            }
+        }
+
+        function toggleAdmin() {
+            if (isAdmin()) {
+                document.getElementById('adminContent').classList.toggle('active');
+            } else {
+                adminLogin();
+            }
+        }
+
+        function toggleZodiacUpload() {
+            if (isAdmin()) {
+                document.getElementById('zodiacUploadContent').classList.toggle('active');
+            } else {
+                adminLogin();
+            }
+        }
+
+        function uploadArt() {
+            const imageInput = document.getElementById('imageInput');
+            const captionInput = document.getElementById('captionInput');
+            if (!imageInput.files.length || !captionInput.value.trim()) {
+                alert('Please select an image and enter a caption.');
+                return;
+            }
+            Array.from(imageInput.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    artPieces.push({
+                        id: Date.now(),
+                        image: e.target.result,
+                        caption: captionInput.value.trim()
+                    });
+                    displayGallery();
+                };
+                reader.readAsDataURL(file);
+            });
+            imageInput.value = '';
+            captionInput.value = '';
+        }
+
+        function uploadWriting() {
+            const titleInput = document.getElementById('writingTitleInput');
+            const contentInput = document.getElementById('writingContentInput');
+            if (!titleInput.value.trim() || !contentInput.value.trim()) {
+                alert('Please enter a title and content.');
+                return;
+            }
+            writingPieces.push({
+                id: Date.now(),
+                title: titleInput.value.trim(),
+                content: contentInput.value.trim(),
+                date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+            });
+            displayZodiacContent();
+            titleInput.value = '';
+            contentInput.value = '';
+        }
+
+        function displayGallery() {
+            const gallery = document.getElementById('galleryContent');
+            gallery.innerHTML = '';
+            artPieces.forEach(piece => {
+                const artDiv = document.createElement('div');
+                artDiv.className = 'art-piece';
+                artDiv.innerHTML = `
+                    <img src="${piece.image}" alt="Gallery Image" onclick="openModal('${piece.image}', '${piece.caption}')">
+                    <div class="art-caption">${piece.caption}</div>
+                    ${isAdmin() ? `<button class="delete-btn" onclick="removeArt(${piece.id})">Delete</button>` : ''}
+                `;
+                gallery.appendChild(artDiv);
+            });
+        }
+
+        function displayZodiacContent() {
+            const zodiacContent = document.getElementById('zodiacContent');
+            zodiacContent.innerHTML = '';
+            writingPieces.forEach(writing => {
+                const writingDiv = document.createElement('div');
+                writingDiv.className = 'writing-piece';
+                writingDiv.innerHTML = `
+                    <div class="writing-title" onclick="openWritingModal('${writing.title}', '${writing.content}', '${writing.date}')">${writing.title}</div>
+                    <div class="writing-date">${writing.date}</div>
+                    <div class="writing-preview">${writing.content.substring(0, 100)}...</div>
+                    ${isAdmin() ? `<button class="delete-btn" onclick="removeWriting(${writing.id})">Delete</button>` : ''}
+                `;
+                zodiacContent.appendChild(writingDiv);
+            });
+        }
+
+        function removeArt(id) {
+            artPieces = artPieces.filter(piece => piece.id !== id);
+            displayGallery();
+        }
+
+        function removeWriting(id) {
+            writingPieces = writingPieces.filter(piece => piece.id !== id);
+            displayZodiacContent();
+        }
+
+        function openModal(imageSrc, caption) {
+            document.getElementById('modalImage').src = imageSrc;
+            document.getElementById('modalCaption').textContent = caption;
+            document.getElementById('imageModal').classList.add('active');
+        }
+
+        function openWritingModal(title, content, date) {
+            document.getElementById('modalWritingTitle').textContent = title;
+            document.getElementById('modalWritingContent').textContent = content;
+            document.getElementById('modalWritingDate').textContent = date;
+            document.getElementById('writingModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').classList.remove('active');
+        }
+
+        function closeWritingModal() {
+            document.getElementById('writingModal').classList.remove('active');
+        }
+    </script>
 </body>
-
-<script>
-// Art storage array (in memory for this session)
-let artPieces = [];
-
-function toggleAdmin() {
-    const adminContent = document.getElementById('adminContent');
-    adminContent.classList.toggle('active');
-}
-
-function uploadArt() {
-    const imageInput = document.getElementById('imageInput');
-    const captionInput = document.getElementById('captionInput');
-    
-    if (!imageInput.files[0]) {
-        alert('Please select an image');
-        return;
-    }
-    
-    if (!captionInput.value.trim()) {
-        alert('Please enter a caption');
-        return;
-    }
-    
-    const file = imageInput.files[0];
-    const reader = new FileReader();
-    
-    reader.onload = function(e) {
-        const artPiece = {
-            id: Date.now(),
-            image: e.target.result,
-            caption: captionInput.value.trim()
-        };
-        
-        artPieces.push(artPiece);
-        displayGallery();
-        
-        // Clear form
-        imageInput.value = '';
-        captionInput.value = '';
-        
-        // Hide admin panel
-        document.getElementById('adminContent').classList.remove('active');
-    };
-    
-    reader.readAsDataURL(file);
-}
-
-function displayGallery() {
-    const gallery = document.getElementById('gallery');
-    gallery.innerHTML = '';
-    
-    artPieces.forEach(piece => {
-        const artDiv = document.createElement('div');
-        artDiv.className = 'art-piece';
-        artDiv.innerHTML = `
-            <img src="${piece.image}" alt="LLM Visual Art">
-            <div class="art-caption">${piece.caption}</div>
-        `;
-        gallery.appendChild(artDiv);
-    });
-}
-
-function removeArt(id) {
-    artPieces = artPieces.filter(piece => piece.id !== id);
-    displayGallery();
-}
-</script>
-
 </html>
