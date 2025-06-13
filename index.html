@@ -29,28 +29,45 @@
             height: 100%;
             pointer-events: none;
             z-index: -1;
+            display: flex; /* Use flexbox for rays */
+            justify-content: center; /* Center rays horizontally */
+            align-items: flex-start; /* Align rays to the top */
         }
 
         .light-ray {
-            position: absolute;
-            top: 15%;
-            left: 50%;
-            width: 6px;
+            position: absolute; /* Changed to absolute for more control */
+            top: 15%; /* Starting point of the light source */
+            left: 50%; /* Center alignment */
+            width: 8px; /* Slightly wider rays */
             height: 85%;
             background: linear-gradient(to bottom, 
-                rgba(255, 255, 255, 0.6), 
-                rgba(255, 255, 255, 0.3), 
-                rgba(255, 255, 255, 0.15), 
+                rgba(255, 255, 255, 0.7), /* Brighter top */
+                rgba(255, 255, 255, 0.4), 
+                rgba(255, 255, 255, 0.2), 
                 transparent);
             transform-origin: top center;
-            filter: blur(0.3px);
+            filter: blur(0.5px); /* More blur for a softer glow */
+            opacity: 0.8; /* Slightly less opaque */
         }
 
-        .light-ray:nth-child(1) { transform: translateX(-50%) rotate(-30deg); }
-        .light-ray:nth-child(2) { transform: translateX(-50%) rotate(-15deg); }
+        .light-ray:nth-child(1) { transform: translateX(-50%) rotate(-35deg); }
+        .light-ray:nth-child(2) { transform: translateX(-50%) rotate(-20deg); }
         .light-ray:nth-child(3) { transform: translateX(-50%) rotate(0deg); }
-        .light-ray:nth-child(4) { transform: translateX(-50%) rotate(15deg); }
-        .light-ray:nth-child(5) { transform: translateX(-50%) rotate(30deg); }
+        .light-ray:nth-child(4) { transform: translateX(-50%) rotate(20deg); }
+        .light-ray:nth-child(5) { transform: translateX(-50%) rotate(35deg); }
+        .light-ray:nth-child(6) { /* Adding more rays for density */
+            transform: translateX(-50%) rotate(-45deg);
+            width: 5px; /* Thinner for variety */
+            opacity: 0.7;
+            filter: blur(0.4px);
+        }
+        .light-ray:nth-child(7) {
+            transform: translateX(-50%) rotate(45deg);
+            width: 5px;
+            opacity: 0.7;
+            filter: blur(0.4px);
+        }
+
 
         /* Navigation Bar */
         nav {
@@ -64,6 +81,7 @@
             display: flex;
             justify-content: center;
             gap: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
         }
 
         nav a {
@@ -71,11 +89,12 @@
             text-decoration: none;
             font-size: 1.1rem;
             font-weight: 500;
-            transition: color 0.3s ease;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
         }
 
         nav a:hover {
             color: #cccccc;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5); /* Subtle glow on hover */
         }
 
         /* Main content */
@@ -89,11 +108,45 @@
         }
 
         h1, h2 {
-            font-size: 2.5rem;
+            font-size: 3.5rem; /* Larger title */
             margin-bottom: 2rem;
             text-align: center;
             color: #ffffff;
+            position: relative; /* Needed for pseudo-element glow */
+            z-index: 2; /* Ensure title is above rays if needed */
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6), /* Initial subtle glow */
+                         0 0 25px rgba(255, 255, 255, 0.4);
         }
+
+        /* Light emanating from rey_space title */
+        #home h1::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%; /* Slightly wider than the text */
+            height: 120%; /* Slightly taller than the text */
+            background: radial-gradient(circle at center, 
+                        rgba(255, 255, 255, 0.2) 0%, 
+                        rgba(255, 255, 255, 0.05) 50%, 
+                        transparent 70%);
+            filter: blur(30px); /* Stronger blur for light effect */
+            z-index: -1;
+            animation: pulse-glow 3s infinite alternate ease-in-out; /* Gentle pulsing glow */
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.05);
+                opacity: 1;
+            }
+        }
+
 
         p {
             font-size: 1.1rem;
@@ -101,30 +154,16 @@
             margin-bottom: 1rem;
             color: #cccccc;
             text-align: center;
+            max-width: 800px; /* Constrain paragraph width */
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* Home Section Links */
+        /* Removed .home-links styles */
         .home-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 2rem;
+            display: none; /* Hide the entire home-links div */
         }
 
-        .home-links a {
-            padding: 0.75rem 1.5rem;
-            background: #222;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            transition: background 0.3s ease, transform 0.3s ease;
-        }
-
-        .home-links a:hover {
-            background: #333;
-            transform: translateY(-3px);
-        }
 
         /* Gallery styles */
         .gallery {
@@ -142,11 +181,13 @@
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Add shadow for depth */
         }
 
         .art-piece:hover {
             transform: translateY(-5px);
             border-color: #555;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
         }
 
         .art-piece img {
@@ -161,6 +202,7 @@
             font-size: 0.85rem;
             color: #cccccc;
             background: #111;
+            text-align: left; /* Align caption to the left */
         }
 
         /* Delete button for posts */
@@ -168,7 +210,7 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background: #ff4444;
+            background: rgba(255, 68, 68, 0.8); /* Slightly transparent */
             color: white;
             border: none;
             padding: 0.3rem 0.6rem;
@@ -176,6 +218,11 @@
             border-radius: 4px;
             font-size: 0.8rem;
             display: none;
+            transition: background 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #ff4444;
         }
 
         .art-piece:hover .delete-btn, .writing-piece:hover .delete-btn {
@@ -208,6 +255,7 @@
             border-radius: 12px;
             overflow: hidden;
             z-index: 1001;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7); /* Stronger shadow for modal */
         }
 
         .modal-image {
@@ -222,6 +270,7 @@
             font-size: 1rem;
             color: #fff;
             background: #111;
+            text-align: left; /* Align caption to the left */
         }
 
         .close {
@@ -231,6 +280,7 @@
             color: #fff;
             font-size: 2rem;
             cursor: pointer;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* Close button glow */
         }
 
         /* Admin upload section */
@@ -240,20 +290,32 @@
             border-radius: 8px;
             padding: 2rem;
             margin-bottom: 3rem;
+            text-align: center; /* Center the toggle button */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         .admin-toggle {
             background: #333;
             color: white;
             border: none;
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1.5rem; /* Increased padding */
             cursor: pointer;
             border-radius: 4px;
             margin-bottom: 1rem;
+            font-size: 1rem; /* Larger font size */
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .admin-toggle:hover {
+            background: #555;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); /* Subtle hover glow */
         }
 
         .admin-content {
             display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #333;
         }
 
         .admin-content.active {
@@ -264,9 +326,11 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            max-width: 600px; /* Limit form width */
+            margin: 0 auto; /* Center the form */
         }
 
-        .file-input, .writing-title-input, .writing-content-input {
+        .file-input, .writing-title-input, .writing-content-input, .login-input {
             background: #222;
             border: 1px solid #444;
             color: white;
@@ -282,6 +346,7 @@
             padding: 0.75rem 1.5rem;
             cursor: pointer;
             border-radius: 4px;
+            transition: background 0.3s ease;
         }
 
         .upload-btn:hover {
@@ -295,6 +360,8 @@
             border-radius: 8px;
             padding: 2rem;
             margin-bottom: 3rem;
+            text-align: center; /* Center the toggle button */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         .zodiac-content {
@@ -311,25 +378,144 @@
             padding: 1.5rem;
             cursor: pointer;
             position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .writing-piece:hover {
+            transform: translateY(-5px);
+            border-color: #666;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
 
         .writing-title {
             font-size: 1.3rem;
             color: #fff;
             margin-bottom: 0.5rem;
+            text-align: left;
         }
 
         .writing-date {
             font-size: 0.85rem;
             color: #888;
             margin-bottom: 1rem;
+            text-align: left;
         }
 
         .writing-preview {
             font-size: 0.95rem;
             color: #ccc;
-            max-height: 4.5em;
+            max-height: 4.5em; /* Limit preview height */
             overflow: hidden;
+            text-overflow: ellipsis; /* Add ellipsis for overflow */
+            text-align: left;
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: none; /* Hidden by default */
+            margin: 10px auto; /* Center it */
+        }
+
+        .loading-spinner.active {
+            display: block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Admin Login Form */
+        #adminLoginForm {
+            background: #222;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #adminLoginForm input {
+            width: 100%;
+        }
+
+        #adminLoginForm button {
+            width: fit-content;
+            align-self: flex-end;
+            margin-top: 0.5rem;
+        }
+
+        /* Contact Form Styles */
+        .contact-form {
+            background: #111; /* Darker background for the form itself */
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 600px; /* Max width for the form */
+            margin: 0 auto; /* Center the form horizontally */
+            display: flex;
+            flex-direction: column;
+            gap: 1rem; /* Spacing between form groups */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+        }
+
+        .contact-form .form-group {
+            margin-bottom: 0; /* Remove default margin as gap handles it */
+        }
+
+        .contact-form input[type="text"],
+        .contact-form input[type="email"],
+        .contact-form textarea {
+            width: 100%; /* Full width within the form-group */
+            padding: 0.75rem;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background: #222;
+            color: #fff;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .contact-form input[type="text"]:focus,
+        .contact-form input[type="email"]:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: #666; /* Highlight border on focus */
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.2); /* Subtle glow on focus */
+        }
+
+        .contact-form textarea {
+            resize: vertical; /* Allow vertical resizing */
+            min-height: 100px; /* Minimum height for textarea */
+        }
+
+        .contact-form button[type="submit"] {
+            background: #444;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            align-self: flex-end; /* Align button to the right */
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .contact-form button[type="submit"]:hover {
+            background: #555;
+            transform: translateY(-2px); /* Slight lift on hover */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         /* Responsive design */
@@ -347,24 +533,35 @@
                 height: 120px;
             }
 
+            /* Removed .home-links specific styles */
             .home-links {
-                flex-direction: column;
-                align-items: center;
+                display: none; /* Ensure it stays hidden */
+            }
+
+            .zodiac-content {
+                grid-template-columns: 1fr; /* Single column on small screens */
+            }
+
+            h1 {
+                font-size: 2.5rem; /* Adjust title size for smaller screens */
+            }
+
+            .contact-form {
+                padding: 1.5rem; /* Slightly less padding on small screens */
             }
         }
     </style>
 </head>
 <body>
-    <!-- Gothic window light rays -->
     <div class="gothic-window">
         <div class="light-ray"></div>
         <div class="light-ray"></div>
         <div class="light-ray"></div>
         <div class="light-ray"></div>
         <div class="light-ray"></div>
+        <div class="light-ray"></div> <div class="light-ray"></div>
     </div>
 
-    <!-- Navigation Bar -->
     <nav>
         <a href="#home">Home</a>
         <a href="#gallery">Gallery</a>
@@ -372,50 +569,51 @@
         <a href="#contact">Contact</a>
     </nav>
 
-    <!-- Home Section -->
     <section id="home">
         <h1>rey_space</h1>
         <p>hi</p>
-        <div class="home-links">
-            <a href="#gallery">View Gallery</a>
-            <a href="#zodiac">Read Zodiac Insights</a>
-            <a href="#contact">Contact Us</a>
-        </div>
-    </section>
+        </section>
 
-    <!-- Gallery Section -->
     <section id="gallery">
         <h2>Visuals</h2>
         <div class="admin-section">
-            <button class="admin-toggle" onclick="toggleAdmin()">Upload Image</button>
-            <div class="admin-content" id="adminContent">
-                <div class="upload-form">
+            <button class="admin-toggle" onclick="toggleAdminPanel('gallery')">Upload Image</button>
+            <div class="admin-content" id="galleryAdminContent">
+                <div id="adminLoginFormGallery" style="display: none;">
+                    <input type="password" class="login-input" id="adminPasswordGallery" placeholder="Admin Password">
+                    <button class="upload-btn" onclick="attemptAdminLogin('gallery')">Login</button>
+                </div>
+                <div class="upload-form" id="imageUploadForm" style="display: none;">
                     <input type="file" class="file-input" id="imageInput" accept="image/*" multiple>
                     <textarea placeholder="Enter caption..." id="captionInput" rows="3"></textarea>
                     <button class="upload-btn" onclick="uploadArt()">Upload</button>
+                    <div class="loading-spinner" id="imageLoadingSpinner"></div>
                 </div>
             </div>
         </div>
         <div class="gallery" id="galleryContent"></div>
     </section>
 
-    <!-- Zodiac Writing Section -->
     <section id="zodiac">
         <h2>Zodiac Insights</h2>
         <div class="zodiac-section">
-            <button class="admin-toggle" onclick="toggleZodiacUpload()">Upload Writing</button>
-            <div class="admin-content" id="zodiacUploadContent">
-                <div class="upload-form">
+            <button class="admin-toggle" onclick="toggleAdminPanel('zodiac')">Upload Writing</button>
+            <div class="admin-content" id="zodiacAdminContent">
+                <div id="adminLoginFormZodiac" style="display: none;">
+                    <input type="password" class="login-input" id="adminPasswordZodiac" placeholder="Admin Password">
+                    <button class="upload-btn" onclick="attemptAdminLogin('zodiac')">Login</button>
+                </div>
+                <div class="upload-form" id="writingUploadForm" style="display: none;">
                     <input type="text" class="writing-title-input" id="writingTitleInput" placeholder="Title">
                     <textarea class="writing-content-input" id="writingContentInput" placeholder="Content" rows="8"></textarea>
                     <button class="upload-btn" onclick="uploadWriting()">Upload</button>
+                    <div class="loading-spinner" id="writingLoadingSpinner"></div>
                 </div>
             </div>
         </div>
         <div class="zodiac-content" id="zodiacContent"></div>
     </section>
 
-    <!-- Contact Section -->
     <section id="contact">
         <h2>Contact</h2>
         <form class="contact-form" action="mailto:airplane.places@gmail.com" method="post" enctype="text/plain">
@@ -432,7 +630,6 @@
         </form>
     </section>
 
-    <!-- Modals -->
     <div id="imageModal" class="modal" onclick="closeModal(event)">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">×</span>
@@ -455,89 +652,185 @@
     <script>
         let artPieces = [];
         let writingPieces = [];
-        const adminPassword = "admin123";
+        const adminPassword = "admin123"; // Still hardcoded for client-side demo
 
+        // --- Persistence Functions ---
+        function saveArtPieces() {
+            localStorage.setItem('artPieces', JSON.stringify(artPieces));
+        }
+
+        function loadArtPieces() {
+            const storedArt = localStorage.getItem('artPieces');
+            if (storedArt) {
+                artPieces = JSON.parse(storedArt);
+            }
+        }
+
+        function saveWritingPieces() {
+            localStorage.setItem('writingPieces', JSON.stringify(writingPieces));
+        }
+
+        function loadWritingPieces() {
+            const storedWriting = localStorage.getItem('writingPieces');
+            if (storedWriting) {
+                writingPieces = JSON.parse(storedWriting);
+            }
+        }
+
+        // --- Admin Functions ---
         function isAdmin() {
             return localStorage.getItem('isAdmin') === 'true';
         }
 
-        function adminLogin() {
-            const password = prompt("Enter admin password:");
-            if (password === adminPassword) {
-                localStorage.setItem('isAdmin', 'true');
+        function setAdminStatus(status) {
+            localStorage.setItem('isAdmin', status ? 'true' : 'false');
+            // Re-render content to show/hide delete buttons
+            displayGallery();
+            displayZodiacContent();
+        }
+
+        function toggleAdminPanel(section) {
+            const galleryAdminContent = document.getElementById('galleryAdminContent');
+            const zodiacAdminContent = document.getElementById('zodiacAdminContent');
+            const loginFormGallery = document.getElementById('adminLoginFormGallery');
+            const loginFormZodiac = document.getElementById('adminLoginFormZodiac');
+            const imageUploadForm = document.getElementById('imageUploadForm');
+            const writingUploadForm = document.getElementById('writingUploadForm');
+
+            if (section === 'gallery') {
+                galleryAdminContent.classList.toggle('active');
+                if (isAdmin()) {
+                    loginFormGallery.style.display = 'none';
+                    imageUploadForm.style.display = 'block';
+                } else {
+                    loginFormGallery.style.display = 'block';
+                    imageUploadForm.style.display = 'none';
+                }
+            } else if (section === 'zodiac') {
+                zodiacAdminContent.classList.toggle('active');
+                if (isAdmin()) {
+                    loginFormZodiac.style.display = 'none';
+                    writingUploadForm.style.display = 'block';
+                } else {
+                    loginFormZodiac.style.display = 'block';
+                    writingUploadForm.style.display = 'none';
+                }
+            }
+        }
+
+        function attemptAdminLogin(section) {
+            let passwordInput;
+            let adminLoginForm;
+            let uploadForm;
+
+            if (section === 'gallery') {
+                passwordInput = document.getElementById('adminPasswordGallery');
+                adminLoginForm = document.getElementById('adminLoginFormGallery');
+                uploadForm = document.getElementById('imageUploadForm');
+            } else if (section === 'zodiac') {
+                passwordInput = document.getElementById('adminPasswordZodiac');
+                adminLoginForm = document.getElementById('adminLoginFormZodiac');
+                uploadForm = document.getElementById('writingUploadForm');
+            }
+
+            if (passwordInput.value === adminPassword) {
+                setAdminStatus(true);
                 alert("Admin access granted.");
-                displayGallery();
-                displayZodiacContent();
+                adminLoginForm.style.display = 'none';
+                uploadForm.style.display = 'block';
             } else {
                 alert("Incorrect password.");
+                passwordInput.value = ''; // Clear password on failure
             }
         }
 
-        function toggleAdmin() {
-            if (isAdmin()) {
-                document.getElementById('adminContent').classList.toggle('active');
-            } else {
-                adminLogin();
-            }
-        }
-
-        function toggleZodiacUpload() {
-            if (isAdmin()) {
-                document.getElementById('zodiacUploadContent').classList.toggle('active');
-            } else {
-                adminLogin();
-            }
-        }
-
+        // --- Upload Functions ---
         function uploadArt() {
             const imageInput = document.getElementById('imageInput');
             const captionInput = document.getElementById('captionInput');
-            if (!imageInput.files.length || !captionInput.value.trim()) {
-                alert('Please select an image and enter a caption.');
+            const loadingSpinner = document.getElementById('imageLoadingSpinner');
+
+            if (!imageInput.files.length) {
+                alert('Please select at least one image.');
                 return;
             }
+            if (!captionInput.value.trim()) {
+                alert('Please enter a caption.');
+                return;
+            }
+
+            loadingSpinner.classList.add('active'); // Show spinner
+
+            let filesProcessed = 0;
+            const totalFiles = imageInput.files.length;
+
             Array.from(imageInput.files).forEach(file => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     artPieces.push({
-                        id: Date.now(),
+                        id: Date.now() + filesProcessed, // Ensure unique ID for multiple files
                         image: e.target.result,
                         caption: captionInput.value.trim()
                     });
-                    displayGallery();
+                    filesProcessed++;
+                    if (filesProcessed === totalFiles) {
+                        saveArtPieces(); // Save after all files are processed
+                        displayGallery();
+                        imageInput.value = ''; // Clear input
+                        captionInput.value = ''; // Clear input
+                        loadingSpinner.classList.remove('active'); // Hide spinner
+                        document.getElementById('galleryAdminContent').classList.remove('active'); // Close panel after upload
+                    }
+                };
+                reader.onerror = function() {
+                    alert('Error reading file: ' + file.name);
+                    filesProcessed++;
+                    if (filesProcessed === totalFiles) {
+                        loadingSpinner.classList.remove('active'); // Hide spinner even on error
+                    }
                 };
                 reader.readAsDataURL(file);
             });
-            imageInput.value = '';
-            captionInput.value = '';
         }
 
         function uploadWriting() {
             const titleInput = document.getElementById('writingTitleInput');
             const contentInput = document.getElementById('writingContentInput');
+            const loadingSpinner = document.getElementById('writingLoadingSpinner');
+
             if (!titleInput.value.trim() || !contentInput.value.trim()) {
                 alert('Please enter a title and content.');
                 return;
             }
-            writingPieces.push({
-                id: Date.now(),
-                title: titleInput.value.trim(),
-                content: contentInput.value.trim(),
-                date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-            });
-            displayZodiacContent();
-            titleInput.value = '';
-            contentInput.value = '';
+
+            loadingSpinner.classList.add('active'); // Show spinner
+
+            // Simulate async operation for loading state
+            setTimeout(() => {
+                writingPieces.push({
+                    id: Date.now(),
+                    title: titleInput.value.trim(),
+                    content: contentInput.value.trim(),
+                    date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+                });
+                saveWritingPieces(); // Save after adding
+                displayZodiacContent();
+                titleInput.value = '';
+                contentInput.value = '';
+                loadingSpinner.classList.remove('active'); // Hide spinner
+                document.getElementById('zodiacAdminContent').classList.remove('active'); // Close panel after upload
+            }, 500); // Small delay to show spinner
         }
 
+        // --- Display Functions ---
         function displayGallery() {
             const gallery = document.getElementById('galleryContent');
-            gallery.innerHTML = '';
+            gallery.innerHTML = ''; // Clear existing content
             artPieces.forEach(piece => {
                 const artDiv = document.createElement('div');
                 artDiv.className = 'art-piece';
                 artDiv.innerHTML = `
-                    <img src="${piece.image}" alt="Gallery Image" onclick="openModal('${piece.image}', '${piece.caption}')">
+                    <img src="${piece.image}" alt="Gallery Image" onclick="openModal('${piece.image}', '${encodeURIComponent(piece.caption)}')">
                     <div class="art-caption">${piece.caption}</div>
                     ${isAdmin() ? `<button class="delete-btn" onclick="removeArt(${piece.id})">Delete</button>` : ''}
                 `;
@@ -547,50 +840,66 @@
 
         function displayZodiacContent() {
             const zodiacContent = document.getElementById('zodiacContent');
-            zodiacContent.innerHTML = '';
+            zodiacContent.innerHTML = ''; // Clear existing content
             writingPieces.forEach(writing => {
                 const writingDiv = document.createElement('div');
                 writingDiv.className = 'writing-piece';
                 writingDiv.innerHTML = `
-                    <div class="writing-title" onclick="openWritingModal('${writing.title}', '${writing.content}', '${writing.date}')">${writing.title}</div>
+                    <div class="writing-title" onclick="openWritingModal('${encodeURIComponent(writing.title)}', '${encodeURIComponent(writing.content)}', '${encodeURIComponent(writing.date)}')">${writing.title}</div>
                     <div class="writing-date">${writing.date}</div>
-                    <div class="writing-preview">${writing.content.substring(0, 100)}...</div>
+                    <div class="writing-preview">${writing.content.substring(0, 100)}${writing.content.length > 100 ? '...' : ''}</div>
                     ${isAdmin() ? `<button class="delete-btn" onclick="removeWriting(${writing.id})">Delete</button>` : ''}
                 `;
                 zodiacContent.appendChild(writingDiv);
             });
         }
 
+        // --- Remove Functions ---
         function removeArt(id) {
+            if (!isAdmin() || !confirm('Are you sure you want to delete this art piece?')) return;
             artPieces = artPieces.filter(piece => piece.id !== id);
+            saveArtPieces();
             displayGallery();
         }
 
         function removeWriting(id) {
+            if (!isAdmin() || !confirm('Are you sure you want to delete this writing piece?')) return;
             writingPieces = writingPieces.filter(piece => piece.id !== id);
+            saveWritingPieces();
             displayZodiacContent();
         }
 
+        // --- Modal Functions ---
         function openModal(imageSrc, caption) {
             document.getElementById('modalImage').src = imageSrc;
-            document.getElementById('modalCaption').textContent = caption;
+            document.getElementById('modalCaption').textContent = decodeURIComponent(caption);
             document.getElementById('imageModal').classList.add('active');
         }
 
         function openWritingModal(title, content, date) {
-            document.getElementById('modalWritingTitle').textContent = title;
-            document.getElementById('modalWritingContent').textContent = content;
-            document.getElementById('modalWritingDate').textContent = date;
+            document.getElementById('modalWritingTitle').textContent = decodeURIComponent(title);
+            document.getElementById('modalWritingContent').textContent = decodeURIComponent(content);
+            document.getElementById('modalWritingDate').textContent = decodeURIComponent(date);
             document.getElementById('writingModal').classList.add('active');
         }
 
-        function closeModal() {
+        function closeModal(event) {
+            if (event && event.target !== event.currentTarget) return; // Only close if clicking outside modal-content
             document.getElementById('imageModal').classList.remove('active');
         }
 
-        function closeWritingModal() {
+        function closeWritingModal(event) {
+            if (event && event.target !== event.currentTarget) return; // Only close if clicking outside modal-content
             document.getElementById('writingModal').classList.remove('active');
         }
+
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadArtPieces();
+            loadWritingPieces();
+            displayGallery();
+            displayZodiacContent();
+        });
     </script>
 </body>
 </html>
