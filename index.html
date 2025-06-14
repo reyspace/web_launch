@@ -512,166 +512,185 @@
             <div class="writing-modal-body" id="modalWritingContent"></div>
         </div>
     </div>
+<script>
+    let artPieces = [];
+    let writingPieces = [];
+    const adminPassword = "admin123";
 
-    <script>
-        let artPieces = [];
-        let writingPieces = [];
-        const adminPassword = "admin123";
-
-        function isAdmin() {
-            return sessionStorage.getItem('isAdmin') === 'true';
-        }
-
-        function adminLogin() {
-            const password = prompt("Enter admin password:");
-            if (password === adminPassword) {
-                sessionStorage.setItem('isAdmin', 'true');
-                alert("Admin access granted.");
+    // Function to fetch data from GitHub
+    function loadData() {
+        fetch('https://raw.githubusercontent.com/reyspace/web_launch/main/gallery-data.json')
+            .then(response => response.json())
+            .then(data => {
+                artPieces = data.gallery; // Load gallery data
+                writingPieces = data.zodiac; // Load zodiac data
                 displayGallery();
                 displayZodiacContent();
-            } else {
-                alert("Incorrect password.");
-            }
-        }
+            })
+            .catch(error => console.error('Error loading data:', error));
+    }
 
-        function toggleAdmin() {
-            if (isAdmin()) {
-                document.getElementById('adminContent').classList.toggle('active');
-            } else {
-                adminLogin();
-            }
-        }
+    // Admin login and toggle functions (unchanged)
+    function isAdmin() {
+        return sessionStorage.getItem('isAdmin') === 'true';
+    }
 
-        function toggleZodiacUpload() {
-            if (isAdmin()) {
-                document.getElementById('zodiacUploadContent').classList.toggle('active');
-            } else {
-                adminLogin();
-            }
-        }
-
-        function uploadArt() {
-            const imageInput = document.getElementById('imageInput');
-            const captionInput = document.getElementById('captionInput');
-            if (!imageInput.files.length || !captionInput.value.trim()) {
-                alert('Please select an image and enter a caption.');
-                return;
-            }
-            Array.from(imageInput.files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    artPieces.push({
-                        id: Date.now() + Math.random(),
-                        image: e.target.result,
-                        caption: captionInput.value.trim()
-                    });
-                    displayGallery();
-                };
-                reader.readAsDataURL(file);
-            });
-            imageInput.value = '';
-            captionInput.value = '';
-        }
-
-        function uploadWriting() {
-            const titleInput = document.getElementById('writingTitleInput');
-            const contentInput = document.getElementById('writingContentInput');
-            if (!titleInput.value.trim() || !contentInput.value.trim()) {
-                alert('Please enter a title and content.');
-                return;
-            }
-            writingPieces.push({
-                id: Date.now(),
-                title: titleInput.value.trim(),
-                content: contentInput.value.trim(),
-                date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-            });
-            displayZodiacContent();
-            titleInput.value = '';
-            contentInput.value = '';
-        }
-
-        function displayGallery() {
-            const gallery = document.getElementById('galleryContent');
-            gallery.innerHTML = '';
-            artPieces.forEach(piece => {
-                const artDiv = document.createElement('div');
-                artDiv.className = 'art-piece';
-                artDiv.innerHTML = `
-                    <img src="${piece.image}" alt="Gallery Image" onclick="openModal('${piece.image}', '${piece.caption}')">
-                    <div class="art-caption">${piece.caption}</div>
-                    ${isAdmin() ? `<button class="delete-btn" onclick="removeArt(${piece.id})">Delete</button>` : ''}
-                `;
-                gallery.appendChild(artDiv);
-            });
-        }
-
-        function displayZodiacContent() {
-            const zodiacContent = document.getElementById('zodiacContent');
-            zodiacContent.innerHTML = '';
-            writingPieces.forEach(writing => {
-                const writingDiv = document.createElement('div');
-                writingDiv.className = 'writing-piece';
-                writingDiv.innerHTML = `
-                    <div class="writing-title" onclick="openWritingModal('${writing.title}', '${writing.content}', '${writing.date}')">${writing.title}</div>
-                    <div class="writing-date">${writing.date}</div>
-                    <div class="writing-preview">${writing.content.substring(0, 100)}...</div>
-                    ${isAdmin() ? `<button class="delete-btn" onclick="removeWriting(${writing.id})">Delete</button>` : ''}
-                `;
-                zodiacContent.appendChild(writingDiv);
-            });
-        }
-
-        function removeArt(id) {
-            artPieces = artPieces.filter(piece => piece.id !== id);
+    function adminLogin() {
+        const password = prompt("Enter admin password:");
+        if (password === adminPassword) {
+            sessionStorage.setItem('isAdmin', 'true');
+            alert("Admin access granted.");
             displayGallery();
-        }
-
-        function removeWriting(id) {
-            writingPieces = writingPieces.filter(piece => piece.id !== id);
             displayZodiacContent();
+        } else {
+            alert("Incorrect password.");
         }
+    }
 
-        function openModal(imageSrc, caption) {
-            document.getElementById('modalImage').src = imageSrc;
-            document.getElementById('modalCaption').textContent = caption;
-            document.getElementById('imageModal').classList.add('active');
+    function toggleAdmin() {
+        if (isAdmin()) {
+            document.getElementById('adminContent').classList.toggle('active');
+        } else {
+            adminLogin();
         }
+    }
 
-        function openWritingModal(title, content, date) {
-            document.getElementById('modalWritingTitle').textContent = title;
-            document.getElementById('modalWritingContent').textContent = content;
-            document.getElementById('modalWritingDate').textContent = date;
-            document.getElementById('writingModal').classList.add('active');
+    function toggleZodiacUpload() {
+        if (isAdmin()) {
+            document.getElementById('zodiacUploadContent').classList.toggle('active');
+        } else {
+            adminLogin();
         }
+    }
 
-        function closeModal(event) {
-            if (event && event.target !== event.currentTarget) return;
-            document.getElementById('imageModal').classList.remove('active');
+    // Upload functions (keep for local admin use, but note they won't save to GitHub)
+    function uploadArt() {
+        const imageInput = document.getElementById('imageInput');
+        const captionInput = document.getElementById('captionInput');
+        if (!imageInput.files.length || !captionInput.value.trim()) {
+            alert('Please select an image and enter a caption.');
+            return;
         }
-
-        function closeWritingModal(event) {
-            if (event && event.target !== event.currentTarget) return;
-            document.getElementById('writingModal').classList.remove('active');
-        }
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
+        Array.from(imageInput.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                artPieces.push({
+                    id: Date.now() + Math.random(),
+                    image: e.target.result,
+                    caption: captionInput.value.trim()
+                });
+                displayGallery();
+            };
+            reader.readAsDataURL(file);
         });
+        imageInput.value = '';
+        captionInput.value = '';
+    }
 
-        // Initialize displays
-        displayGallery();
+    function uploadWriting() {
+        const titleInput = document.getElementById('writingTitleInput');
+        const contentInput = document.getElementById('writingContentInput');
+        if (!titleInput.value.trim() || !contentInput.value.trim()) {
+            alert('Please enter a title and content.');
+            return;
+        }
+        writingPieces.push({
+            id: Date.now(),
+            title: titleInput.value.trim(),
+            content: contentInput.value.trim(),
+            date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+        });
         displayZodiacContent();
-    </script>
+        titleInput.value = '';
+        contentInput.value = '';
+    }
+
+    // Display functions (updated to use fetched data)
+    function displayGallery() {
+        const gallery = document.getElementById('galleryContent');
+        gallery.innerHTML = '';
+        artPieces.forEach(piece => {
+            const artDiv = document.createElement('div');
+            artDiv.className = 'art-piece';
+            artDiv.innerHTML = `
+                <img src="${piece.image}" alt="${piece.caption}" onclick="openModal('${piece.image}', '${piece.caption}')">
+                <div class="art-caption">${piece.caption}</div>
+                ${isAdmin() ? `<button class="delete-btn" onclick="removeArt('${piece.id}')">Delete</button>` : ''}
+            `;
+            gallery.appendChild(artDiv);
+        });
+    }
+
+    function displayZodiacContent() {
+        const zodiacContent = document.getElementById('zodiacContent');
+        zodiacContent.innerHTML = '';
+        writingPieces.forEach(writing => {
+            const writingDiv = document.createElement('div');
+            writingDiv.className = 'writing-piece';
+            writingDiv.innerHTML = `
+                <div class="writing-title" onclick="openWritingModal('${writing.title}', '${writing.content}', '${writing.date}')">${writing.title}</div>
+                <div class="writing-date">${writing.date}</div>
+                <div class="writing-preview">${writing.content.substring(0, 100)}...</div>
+                ${isAdmin() ? `<button class="delete-btn" onclick="removeWriting('${writing.id}')">Delete</button>` : ''}
+            `;
+            zodiacContent.appendChild(writingDiv);
+        });
+    }
+
+    // Remove functions (updated for unique IDs)
+    function removeArt(id) {
+        artPieces = artPieces.filter(piece => piece.id !== id);
+        displayGallery();
+        // Note: This only removes from memory, not GitHub JSON
+    }
+
+    function removeWriting(id) {
+        writingPieces = writingPieces.filter(piece => piece.id !== id);
+        displayZodiacContent();
+        // Note: This only removes from memory, not GitHub JSON
+    }
+
+    // Modal functions (unchanged)
+    function openModal(imageSrc, caption) {
+        document.getElementById('modalImage').src = imageSrc;
+        document.getElementById('modalCaption').textContent = caption;
+        document.getElementById('imageModal').classList.add('active');
+    }
+
+    function openWritingModal(title, content, date) {
+        document.getElementById('modalWritingTitle').textContent = title;
+        document.getElementById('modalWritingContent').textContent = content;
+        document.getElementById('modalWritingDate').textContent = date;
+        document.getElementById('writingModal').classList.add('active');
+    }
+
+    function closeModal(event) {
+        if (event && event.target !== event.currentTarget) return;
+        document.getElementById('imageModal').classList.remove('active');
+    }
+
+    function closeWritingModal(event) {
+        if (event && event.target !== event.currentTarget) return;
+        document.getElementById('writingModal').classList.remove('active');
+    }
+
+    // Smooth scrolling (unchanged)
+    document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Initialize by loading data
+    loadData();
+</script>
+
 </body>
 </html>
