@@ -2,11 +2,13 @@
   "zodiac": [
     {
       "id": 1,
+      "sign": "Taurus",
       "title": "Taurus Rant",
       "content": "coming soon"
     },
     {
       "id": 2,
+      "sign": "Scorpio",
       "title": "The Moon in Fall (Scorpio Moon)",
       "content": "coming soon"
     }
