@@ -3,12 +3,12 @@
   "gallery": [
     {
       "id": 1,
-      "image": "https://raw.githubusercontent.com/reyspace/web_launch/main/images/photo1.jpg",
+      "image": "https://raw.githubusercontent.com/reyspace/web_launch/main/images/photo1.webp",
       "caption": "Your caption here"
     },
     {
       "id": 2,
-      "image": "https://raw.githubusercontent.com/reyspace/web_launch/main/images/photo2.jpg",
+      "image": "https://raw.githubusercontent.com/reyspace/web_launch/main/images/photo2.webp",
       "caption": "Another caption"
     }
   ],
