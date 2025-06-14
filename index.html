@@ -444,7 +444,7 @@
             .catch(error => console.error('Error loading zodiac data:', error));
     }
 
-    // Display functions with redirects
+    // Display functions
     function displayGallery() {
         const gallery = document.getElementById('galleryContent');
         gallery.innerHTML = '';
@@ -452,9 +452,7 @@
             const artDiv = document.createElement('div');
             artDiv.className = 'art-piece';
             artDiv.innerHTML = `
-                <a href="image-${piece.id}.html" target="_blank">
-                    <img src="${piece.image}" alt="${piece.caption}">
-                </a>
+                <img src="${piece.image}" alt="${piece.caption}">
                 <div class="art-caption">${piece.caption}</div>
             `;
             gallery.appendChild(artDiv);
