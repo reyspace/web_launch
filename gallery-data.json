@@ -1,4 +1,5 @@
 
+
 {
   "gallery": [
     {
@@ -16,14 +17,14 @@
     {
       "id": 1,
       "title": "Taurus Rant",
-      "content": "...",
-   
+      "content": "A passionate outburst for Taurus energy, grounding yet intense.",
+      "date": "April 20, 2024"
     },
     {
       "id": 2,
       "title": "The Moon in Fall (Scorpio Moon)",
-      "content": "...",
-    
+      "content": "Deep emotions run wild under a Scorpio Moon's influence.",
+      "date": "October 15, 2024"
     }
   ]
 }
