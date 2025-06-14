@@ -1,1 +1,23 @@
 
+{
+  "gallery": [
+    {
+      "id": 1,
+      "image": "https://raw.githubusercontent.com/reyspace/web_launch/main/images/photo1.jpg",
+      "caption": "Your caption here"
+    },
+    {
+      "id": 2,
+      "image": "https://raw.githubusercontent.com/reyspace/web_launch/main/images/photo2.jpg",
+      "caption": "Another caption"
+    }
+  ],
+  "zodiac": [
+    {
+      "id": 1,
+      "title": "Aries Season",
+      "content": "Your zodiac writing here...",
+      "date": "March 21, 2024"
+    }
+  ]
+}
