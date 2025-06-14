@@ -1,5 +1,4 @@
 
-
 {
   "gallery": [
     {
@@ -11,20 +10,6 @@
       "id": 2,
       "image": "https://raw.githubusercontent.com/reyspace/web_launch/main/images/photo2.webp",
       "caption": "The finite is the persistent question"
-    }
-  ],
-  "zodiac": [
-    {
-      "id": 1,
-      "title": "Taurus Rant",
-      "content": "A passionate outburst for Taurus energy, grounding yet intense.",
-      "date": "April 20, 2024"
-    },
-    {
-      "id": 2,
-      "title": "The Moon in Fall (Scorpio Moon)",
-      "content": "Deep emotions run wild under a Scorpio Moon's influence.",
-      "date": "October 15, 2024"
     }
   ]
 }
