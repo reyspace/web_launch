@@ -444,15 +444,17 @@
         const sampleWritingPieces = [
             {
                 id: 1,
+                sign: "Taurus",
                 title: "Taurus Rant",
-                date: "2024-03-15",
-                content: "Coming soon - deep dive into Taurus energy and characteristics..."
+                path: "zodiac-2.html",
+                content: "To understand the Taurus, it helps to describe things in terms of agriculture..."
             },
             {
                 id: 2,
+                sign: "Scorpio", 
                 title: "The Moon in Fall (Scorpio Moon)",
-                date: "2024-03-10",
-                content: "Coming soon - exploring the intensity of Scorpio moon placement..."
+                path: "",
+                content: "coming soon"
             }
         ];
 
@@ -474,15 +476,15 @@
 
         // Function to fetch zodiac data
         function loadZodiacData() {
-            // Try to fetch from JSON, fallback to sample data
-            fetch('https://raw.githubusercontent.com/reyspace/web_launch/main/zodiac-data.json')
+            // FIXED: Changed from 'zodiac-data.json' to 'zodiac.json'
+            fetch('https://raw.githubusercontent.com/reyspace/web_launch/main/zodiac.json')
                 .then(response => response.json())
                 .then(data => {
                     writingPieces = data.zodiac || [];
                     displayZodiacContent();
                 })
                 .catch(error => {
-                    console.log('Using sample data for zodiac');
+                    console.log('Using sample data for zodiac:', error);
                     writingPieces = sampleWritingPieces;
                     displayZodiacContent();
                 });
@@ -514,10 +516,23 @@
                 const writingDiv = document.createElement('div');
                 writingDiv.className = 'writing-piece';
                 writingDiv.innerHTML = `
-                    <div class="writing-title">${writing.title}</div>
-                    <div class="writing-date">${writing.date || 'Date TBD'}</div>
-                    <div class="writing-preview">${writing.content.substring(0, 100)}...</div>
+                    <div class="writing-title">${writing.sign || ''} - ${writing.title}</div>
+                    <div class="writing-date">April 20, 2024</div>
+                    <div class="writing-preview">${writing.content ? writing.content.substring(0, 100) + '...' : 'Coming soon...'}</div>
                 `;
+                
+                // FIXED: Add click event to open HTML pages
+                if (writing.path && writing.path.trim() !== '') {
+                    writingDiv.addEventListener('click', () => {
+                        // Open in new tab/window
+                        window.open(writing.path, '_blank');
+                    });
+                } else {
+                    // If no path, make it less clickable looking
+                    writingDiv.style.cursor = 'default';
+                    writingDiv.style.opacity = '0.7';
+                }
+                
                 zodiacContent.appendChild(writingDiv);
             });
         }
@@ -578,3 +593,4 @@
     </script>
 </body>
 </html>
+Smart
